@@ -64,44 +64,55 @@ class _ChannelsPageState extends State<ChannelsPage> {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
             child: Row(
               children: [
-                const Text(
-                  "Channels & Communities",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                Expanded(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Flexible(
+                        child: Text(
+                          "Channels",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
+                        ),
+                        child: const Text(
+                          "DISCOVER",
+                          style: TextStyle(
+                            color: Color(0xFFB388FF),
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
-                  ),
-                  child: const Text(
-                    "DISCOVER",
-                    style: TextStyle(
-                      color: Color(0xFFB388FF),
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const Spacer(),
                 GlassIconButton(
                   icon: Icons.search,
-                  tooltip: "Explore Channels",
+                  tooltip: "Explore",
+                  size: 36,
                   onTap: () {},
                 ),
               ],
@@ -111,16 +122,16 @@ class _ChannelsPageState extends State<ChannelsPage> {
           // Channels List
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 85),
               itemCount: _channels.length,
               itemBuilder: (context, index) {
                 final ch = _channels[index];
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  padding: const EdgeInsets.all(18),
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.04),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(18),
                     border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                   ),
                   child: Column(
@@ -129,38 +140,45 @@ class _ChannelsPageState extends State<ChannelsPage> {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 24,
+                            radius: 22,
                             backgroundImage: NetworkImage(ch.avatarUrl),
                           ),
-                          const SizedBox(width: 14),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    Text(
-                                      ch.title,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
+                                    Flexible(
+                                      child: Text(
+                                        ch.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.5,
+                                        ),
                                       ),
                                     ),
                                     if (ch.isVerified) ...[
-                                      const SizedBox(width: 5),
-                                      const Icon(Icons.verified, color: Color(0xFF00E5FF), size: 16),
+                                      const SizedBox(width: 4),
+                                      const Icon(Icons.verified, color: Color(0xFF00E5FF), size: 15),
                                     ],
                                   ],
                                 ),
-                                const SizedBox(height: 3),
+                                const SizedBox(height: 2),
                                 Text(
                                   "${ch.handle} • ${ch.subscribers}",
-                                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(color: Colors.white54, fontSize: 11.5),
                                 ),
                               ],
                             ),
                           ),
+                          const SizedBox(width: 8),
                           // Join / Joined Glass Button
                           GlassButton(
                             onTap: () {
@@ -185,36 +203,38 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                     colors: [Color(0xFF7C4DFF), Color(0xFF00E5FF)],
                                   ),
                             color: ch.isJoined ? Colors.white.withValues(alpha: 0.08) : null,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            borderRadius: 14,
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                            borderRadius: 12,
                             child: Text(
                               ch.isJoined ? "Joined" : "Join",
                               style: TextStyle(
                                 color: ch.isJoined ? Colors.white70 : Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                                fontSize: 11.5,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       Text(
                         ch.description,
-                        style: const TextStyle(color: Colors.white70, fontSize: 13),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white70, fontSize: 12.5),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.campaign_outlined, color: Color(0xFF00E5FF), size: 18),
+                            const Icon(Icons.campaign_outlined, color: Color(0xFF00E5FF), size: 16),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Column(
@@ -222,12 +242,14 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                 children: [
                                   Text(
                                     ch.latestPost,
-                                    style: const TextStyle(color: Colors.white, fontSize: 12.5),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(color: Colors.white, fontSize: 12),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 3),
                                   Text(
                                     ch.postTime,
-                                    style: const TextStyle(color: Colors.white38, fontSize: 10.5),
+                                    style: const TextStyle(color: Colors.white38, fontSize: 10),
                                   ),
                                 ],
                               ),
