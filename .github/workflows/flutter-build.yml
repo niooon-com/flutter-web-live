@@ -44,7 +44,7 @@ jobs:
 
       - name: Compile Flutter Web
         run: |
-          flutter build web --release --base-href /
+          flutter build web --release --base-href / -v
           cd build/web
           zip -q -r ../../flutter-web-bundle.zip .
           cd ../..
