@@ -1,6 +1,14 @@
 import "dart:ui";
 import "package:flutter/material.dart";
 
+import "models/chat_models.dart";
+import "widgets/glass_container.dart";
+import "pages/chats_page.dart";
+import "pages/conversation_page.dart";
+import "pages/calls_page.dart";
+import "pages/channels_page.dart";
+import "pages/settings_page.dart";
+
 void main() {
   runApp(const NioooApp());
 }
@@ -29,79 +37,6 @@ class NioooApp extends StatelessWidget {
   }
 }
 
-// Data Models
-class ChatContact {
-  final String id;
-  final String name;
-  final String handle;
-  final String avatarUrl;
-  final String status;
-  final bool isOnline;
-  final String lastMessage;
-  final String time;
-  final int unreadCount;
-  final bool isGroup;
-  final bool isPinned;
-
-  ChatContact({
-    required this.id,
-    required this.name,
-    required this.handle,
-    required this.avatarUrl,
-    required this.status,
-    required this.isOnline,
-    required this.lastMessage,
-    required this.time,
-    required this.unreadCount,
-    this.isGroup = false,
-    this.isPinned = false,
-  });
-}
-
-class ChatMessage {
-  final String id;
-  final String text;
-  final bool isMe;
-  final String time;
-  final bool isRead;
-  final String? replyTo;
-  final String? attachmentType; // 'image', 'audio', null
-  final String? reaction;
-
-  ChatMessage({
-    required this.id,
-    required this.text,
-    required this.isMe,
-    required this.time,
-    this.isRead = true,
-    this.replyTo,
-    this.attachmentType,
-    this.reaction,
-  });
-
-  ChatMessage copyWith({
-    String? id,
-    String? text,
-    bool? isMe,
-    String? time,
-    bool? isRead,
-    String? replyTo,
-    String? attachmentType,
-    String? reaction,
-  }) {
-    return ChatMessage(
-      id: id ?? this.id,
-      text: text ?? this.text,
-      isMe: isMe ?? this.isMe,
-      time: time ?? this.time,
-      isRead: isRead ?? this.isRead,
-      replyTo: replyTo ?? this.replyTo,
-      attachmentType: attachmentType ?? this.attachmentType,
-      reaction: reaction ?? this.reaction,
-    );
-  }
-}
-
 class NioooMainScreen extends StatefulWidget {
   const NioooMainScreen({super.key});
 
@@ -111,18 +46,14 @@ class NioooMainScreen extends StatefulWidget {
 
 class _NioooMainScreenState extends State<NioooMainScreen> {
   int _activeNavIndex = 0; // 0: Chats, 1: Calls, 2: Channels, 3: Settings
-  String _selectedCategory = "All";
-  String _searchQuery = "";
-  final TextEditingController _messageController = TextEditingController();
-  final ScrollController _chatScrollController = ScrollController();
+  bool _mobileShowChatDetail = false;
 
-  // Active call modal state
+  // Active call overlay state
   bool _isCallActive = false;
   bool _isCallMuted = false;
   bool _isSpeakerOn = true;
   String _callingContactName = "";
 
-  // Currently selected contact
   late ChatContact _activeContact;
 
   final List<ChatContact> _contacts = [
@@ -145,7 +76,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       avatarUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150",
       status: "3,420 members • 182 online",
       isOnline: true,
-      lastMessage: "Alex: We just merged the WASM Flutter 3.29 update!",
+      lastMessage: "Alex: We just merged the modular pages architecture!",
       time: "10:35 AM",
       unreadCount: 5,
       isGroup: true,
@@ -209,20 +140,20 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       "1": [
         ChatMessage(
           id: "m1",
-          text: "Hey! Have you seen the updated dark glass interface for niooo?",
+          text: "Hey! Have you seen the modular glass pages on niooo?",
           isMe: false,
           time: "10:38 AM",
         ),
         ChatMessage(
           id: "m2",
-          text: "Yes! The frosted glass blur and cyan accents look phenomenal.",
+          text: "Yes! Each page is in its own separate file with frosted glass aesthetics.",
           isMe: true,
           time: "10:39 AM",
           isRead: true,
         ),
         ChatMessage(
           id: "m3",
-          text: "Voice notes with real-time waveform visualization are so smooth.",
+          text: "Voice note with real-time audio soundwave is super responsive.",
           isMe: false,
           time: "10:40 AM",
           attachmentType: "audio",
@@ -244,7 +175,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         ),
         ChatMessage(
           id: "g2",
-          text: "We just merged the WASM Flutter 3.29 update!",
+          text: "Alex: We just merged the modular pages architecture!",
           isMe: false,
           time: "10:35 AM",
         ),
@@ -291,10 +222,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
     };
   }
 
-  void _sendMessage() {
-    final text = _messageController.text.trim();
-    if (text.isEmpty) return;
-
+  void _handleSendMessage(String text) {
     final newMsg = ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       text: text,
@@ -306,27 +234,15 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
     setState(() {
       _conversations[_activeContact.id] ??= [];
       _conversations[_activeContact.id]!.add(newMsg);
-      _messageController.clear();
     });
 
-    // Auto scroll
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_chatScrollController.hasClients) {
-        _chatScrollController.animateTo(
-          _chatScrollController.position.maxScrollExtent + 80,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-
-    // Simulate smart reply from contact after 1 second
+    // Auto-reply
     Future.delayed(const Duration(milliseconds: 1200), () {
       if (mounted) {
         final replies = [
           "Got it! That looks super clean on niooo.",
           "Awesome! The glassmorphism effect is so responsive.",
-          "Perfect! Love the instant delivery tick.",
+          "Perfect! Love the modular architecture.",
           "✨ Received loud and clear.",
         ];
         final replyText = replies[DateTime.now().second % replies.length];
@@ -342,24 +258,14 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
             ),
           );
         });
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_chatScrollController.hasClients) {
-            _chatScrollController.animateTo(
-              _chatScrollController.position.maxScrollExtent + 80,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        });
       }
     });
   }
 
-  void _startCall(String contactName, bool isVideo) {
+  void _startCall(String name, bool isVideo) {
     setState(() {
       _isCallActive = true;
-      _callingContactName = contactName;
+      _callingContactName = name;
       _isCallMuted = false;
       _isSpeakerOn = true;
     });
@@ -368,7 +274,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 800;
+    final isDesktop = screenWidth >= 850;
 
     return Scaffold(
       body: Stack(
@@ -409,34 +315,85 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
             ),
           ),
 
-          // Main App Container
+          // Main Layout
           SafeArea(
             child: Row(
               children: [
                 // Glass Left Navigation Rail
                 _buildGlassNavRail(),
 
-                // Chat List Column
+                // Dynamic Body Content
                 Expanded(
-                  flex: isDesktop ? 4 : 10,
-                  child: _buildChatListSection(),
+                  child: _buildBodyContent(isDesktop),
                 ),
-
-                // Active Conversation Section (on Desktop/Tablet)
-                if (isDesktop)
-                  Expanded(
-                    flex: 7,
-                    child: _buildConversationSection(),
-                  ),
               ],
             ),
           ),
 
-          // Calling Modal Overlay
+          // Active Call Overlay Modal
           if (_isCallActive) _buildActiveCallOverlay(),
         ],
       ),
     );
+  }
+
+  Widget _buildBodyContent(bool isDesktop) {
+    if (_activeNavIndex == 1) {
+      return CallsPage(onStartCall: _startCall);
+    } else if (_activeNavIndex == 2) {
+      return const ChannelsPage();
+    } else if (_activeNavIndex == 3) {
+      return const SettingsPage();
+    }
+
+    // Default: Chats
+    if (isDesktop) {
+      return Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: ChatsPage(
+              contacts: _contacts,
+              activeContact: _activeContact,
+              onSelectContact: (contact) {
+                setState(() => _activeContact = contact);
+              },
+            ),
+          ),
+          Expanded(
+            flex: 7,
+            child: ConversationPage(
+              contact: _activeContact,
+              messages: _conversations[_activeContact.id] ?? [],
+              onSendMessage: _handleSendMessage,
+              onStartCall: _startCall,
+            ),
+          ),
+        ],
+      );
+    } else {
+      // Mobile adaptive view
+      if (_mobileShowChatDetail) {
+        return ConversationPage(
+          contact: _activeContact,
+          messages: _conversations[_activeContact.id] ?? [],
+          onSendMessage: _handleSendMessage,
+          onStartCall: _startCall,
+          onBack: () => setState(() => _mobileShowChatDetail = false),
+        );
+      } else {
+        return ChatsPage(
+          contacts: _contacts,
+          activeContact: _activeContact,
+          onSelectContact: (contact) {
+            setState(() {
+              _activeContact = contact;
+              _mobileShowChatDetail = true;
+            });
+          },
+        );
+      }
+    }
   }
 
   // Left Slim Glass Navigation Rail
@@ -496,7 +453,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Nav Icons
+              // Nav Buttons
               _navButton(0, Icons.chat_bubble_outline, Icons.chat_bubble, "Chats"),
               const SizedBox(height: 16),
               _navButton(1, Icons.call_outlined, Icons.call, "Calls"),
@@ -536,6 +493,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         onTap: () {
           setState(() {
             _activeNavIndex = index;
+            _mobileShowChatDetail = false;
           });
         },
         child: AnimatedContainer(
@@ -559,721 +517,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
     );
   }
 
-  // Middle/Left Chat List Section
-  Widget _buildChatListSection() {
-    final filteredContacts = _contacts.where((c) {
-      final matchesSearch = c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                            c.lastMessage.toLowerCase().contains(_searchQuery.toLowerCase());
-      if (!matchesSearch) return false;
-
-      if (_selectedCategory == "Unread") return c.unreadCount > 0;
-      if (_selectedCategory == "Groups") return c.isGroup;
-      if (_selectedCategory == "Direct") return !c.isGroup;
-      return true;
-    }).toList();
-
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0E1526).withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with Title & Action
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
-                child: Row(
-                  children: [
-                    const Text(
-                      "niooo",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4)),
-                      ),
-                      child: const Text(
-                        "PRO",
-                        style: TextStyle(
-                          color: Color(0xFF00E5FF),
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    // New Chat Glass Button
-                    _glassIconButton(
-                      icon: Icons.edit_note,
-                      tooltip: "New Chat",
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
-
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                  ),
-                  child: TextField(
-                    onChanged: (val) => setState(() => _searchQuery = val),
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                    decoration: const InputDecoration(
-                      hintText: "Search conversations, people...",
-                      hintStyle: TextStyle(color: Colors.white38, fontSize: 13),
-                      prefixIcon: Icon(Icons.search, color: Colors.white54, size: 20),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 14),
-
-              // Stories / Status Row (WhatsApp / Telegram style)
-              _buildStoriesRow(),
-
-              const SizedBox(height: 12),
-
-              // Filter Tabs
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _categoryChip("All"),
-                      _categoryChip("Unread"),
-                      _categoryChip("Direct"),
-                      _categoryChip("Groups"),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // Chat List
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  itemCount: filteredContacts.length,
-                  itemBuilder: (context, index) {
-                    final contact = filteredContacts[index];
-                    final isSelected = contact.id == _activeContact.id;
-
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 3),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? const Color(0xFF00E5FF).withValues(alpha: 0.12)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(16),
-                        border: isSelected
-                            ? Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.3))
-                            : Border.all(color: Colors.transparent),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          setState(() {
-                            _activeContact = contact;
-                          });
-                        },
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        leading: Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundImage: NetworkImage(contact.avatarUrl),
-                            ),
-                            if (contact.isOnline)
-                              Positioned(
-                                right: 0,
-                                bottom: 0,
-                                child: Container(
-                                  width: 13,
-                                  height: 13,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF10B981),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: const Color(0xFF090D16), width: 2.2),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF10B981).withValues(alpha: 0.6),
-                                        blurRadius: 6,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        title: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                contact.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              contact.time,
-                              style: TextStyle(
-                                color: contact.unreadCount > 0 ? const Color(0xFF00E5FF) : Colors.white38,
-                                fontSize: 11,
-                                fontWeight: contact.unreadCount > 0 ? FontWeight.bold : FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  contact.lastMessage,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: isSelected ? Colors.white70 : Colors.white54,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                              if (contact.unreadCount > 0)
-                                Container(
-                                  margin: const EdgeInsets.only(left: 6),
-                                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    "${contact.unreadCount}",
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Stories row on top of chat list
-  Widget _buildStoriesRow() {
-    return SizedBox(
-      height: 78,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          // My status add button
-          Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white24, width: 1.5),
-                    ),
-                    child: const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      width: 18,
-                      height: 18,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF00E5FF),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.add, color: Colors.black, size: 14),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              const Text("My Story", style: TextStyle(color: Colors.white60, fontSize: 11)),
-            ],
-          ),
-          const SizedBox(width: 14),
-
-          // Other stories
-          for (var i = 0; i < 4; i++) ...[
-            Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(2.2),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF), Color(0xFFFF2A85)],
-                    ),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(1.5),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFF090D16),
-                    ),
-                    child: CircleAvatar(
-                      radius: 23,
-                      backgroundImage: NetworkImage(_contacts[i].avatarUrl),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _contacts[i].name.split(" ")[0],
-                  style: const TextStyle(color: Colors.white70, fontSize: 11),
-                ),
-              ],
-            ),
-            const SizedBox(width: 14),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _categoryChip(String label) {
-    final isSelected = _selectedCategory == label;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedCategory = label),
-      child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? const Color(0xFF00E5FF) : Colors.white60,
-            fontSize: 12,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Right Full Glass Conversation View
-  Widget _buildConversationSection() {
-    final messages = _conversations[_activeContact.id] ?? [];
-
-    return Container(
-      margin: const EdgeInsets.fromLTRB(6, 12, 14, 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0F172A).withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 24,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Column(
-            children: [
-              // Top Chat Header
-              _buildConversationHeader(),
-
-              const Divider(height: 1, color: Colors.white10),
-
-              // Chat Messages Stream
-              Expanded(
-                child: ListView.builder(
-                  controller: _chatScrollController,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final msg = messages[index];
-                    return _buildMessageBubble(msg);
-                  },
-                ),
-              ),
-
-              // Bottom Glass Input Bar
-              _buildGlassInputBar(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Header of the active chat
-  Widget _buildConversationHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      color: Colors.white.withValues(alpha: 0.03),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 22,
-                backgroundImage: NetworkImage(_activeContact.avatarUrl),
-              ),
-              if (_activeContact.isOnline)
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF10B981),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF0F172A), width: 2),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _activeContact.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  _activeContact.status,
-                  style: TextStyle(
-                    color: _activeContact.isOnline ? const Color(0xFF00E5FF) : Colors.white38,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Glass Action Buttons (Audio call, Video call, Options)
-          _glassIconButton(
-            icon: Icons.phone_outlined,
-            tooltip: "Voice Call",
-            onTap: () => _startCall(_activeContact.name, false),
-          ),
-          const SizedBox(width: 8),
-          _glassIconButton(
-            icon: Icons.videocam_outlined,
-            tooltip: "Video Call",
-            onTap: () => _startCall(_activeContact.name, true),
-          ),
-          const SizedBox(width: 8),
-          _glassIconButton(
-            icon: Icons.more_vert,
-            tooltip: "More Options",
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Chat Bubble
-  Widget _buildMessageBubble(ChatMessage msg) {
-    return Align(
-      alignment: msg.isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        constraints: const BoxConstraints(maxWidth: 420),
-        decoration: BoxDecoration(
-          // Sent: Radiant modern gradient; Received: Translucent frosted glass
-          gradient: msg.isMe
-              ? const LinearGradient(
-                  colors: [Color(0xFF0284C7), Color(0xFF0369A1)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
-              : null,
-          color: msg.isMe ? null : Colors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(18),
-            topRight: const Radius.circular(18),
-            bottomLeft: Radius.circular(msg.isMe ? 18 : 4),
-            bottomRight: Radius.circular(msg.isMe ? 4 : 18),
-          ),
-          border: Border.all(
-            color: msg.isMe
-                ? const Color(0xFF38BDF8).withValues(alpha: 0.4)
-                : Colors.white.withValues(alpha: 0.12),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Audio message waveform preview
-                  if (msg.attachmentType == "audio") ...[
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 38,
-                          height: 38,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF00E5FF),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.play_arrow, color: Colors.black),
-                        ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                for (var bar in [14, 22, 10, 26, 18, 12, 28, 20, 16, 24, 8, 18])
-                                  Container(
-                                    width: 3,
-                                    height: bar.toDouble(),
-                                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white70,
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            const Text("0:24 • Voice Note", style: TextStyle(color: Colors.white54, fontSize: 11)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-
-                  // Text content
-                  Text(
-                    msg.text,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.5,
-                      height: 1.35,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  // Bottom info: Timestamp + Ticks + Reaction
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (msg.reaction != null) ...[
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(msg.reaction!, style: const TextStyle(fontSize: 12)),
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                      Text(
-                        msg.time,
-                        style: const TextStyle(color: Colors.white54, fontSize: 11),
-                      ),
-                      if (msg.isMe) ...[
-                        const SizedBox(width: 5),
-                        Icon(
-                          Icons.done_all,
-                          size: 15,
-                          color: msg.isRead ? const Color(0xFF38BDF8) : Colors.white38,
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Bottom Glass Input Bar
-  Widget _buildGlassInputBar() {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        border: const Border(top: BorderSide(color: Colors.white10)),
-      ),
-      child: Row(
-        children: [
-          // Emoji Button
-          _glassIconButton(
-            icon: Icons.sentiment_satisfied_alt_outlined,
-            tooltip: "Emoji",
-            onTap: () {},
-          ),
-          const SizedBox(width: 8),
-
-          // Attachment Button
-          _glassIconButton(
-            icon: Icons.attach_file,
-            tooltip: "Attach Document/Media",
-            onTap: () {},
-          ),
-          const SizedBox(width: 10),
-
-          // Text Field Container
-          Expanded(
-            child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.06),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-              ),
-              child: Center(
-                child: TextField(
-                  controller: _messageController,
-                  onSubmitted: (_) => _sendMessage(),
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                  decoration: const InputDecoration(
-                    hintText: "Write a message in niooo...",
-                    hintStyle: TextStyle(color: Colors.white38, fontSize: 14),
-                    border: InputBorder.none,
-                    isDense: true,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-
-          // Voice Note / Mic Button
-          _glassIconButton(
-            icon: Icons.mic_none,
-            tooltip: "Voice Note",
-            onTap: () {},
-          ),
-          const SizedBox(width: 8),
-
-          // Glowing Glass Send Button
-          GestureDetector(
-            onTap: _sendMessage,
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF00E5FF), Color(0xFF0284C7)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
-                    blurRadius: 14,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: const Center(
-                child: Icon(Icons.send_rounded, color: Colors.white, size: 20),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Active Calling Overlay (Glass Dialog)
+  // Active Calling Overlay Modal
   Widget _buildActiveCallOverlay() {
     return Positioned.fill(
       child: Container(
@@ -1332,7 +576,6 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                   ),
                   const SizedBox(height: 36),
 
-                  // Call Control Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -1348,7 +591,6 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                         onTap: () => setState(() => _isSpeakerOn = !_isSpeakerOn),
                       ),
                       const SizedBox(width: 20),
-                      // End Call
                       GestureDetector(
                         onTap: () => setState(() => _isCallActive = false),
                         child: Container(
@@ -1393,30 +635,6 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
           icon,
           color: isActive ? Colors.black : Colors.white,
           size: 24,
-        ),
-      ),
-    );
-  }
-
-  // Reusable Glass Icon Button
-  Widget _glassIconButton({
-    required IconData icon,
-    required String tooltip,
-    required VoidCallback onTap,
-  }) {
-    return Tooltip(
-      message: tooltip,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.06),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-          ),
-          child: Icon(icon, color: Colors.white70, size: 20),
         ),
       ),
     );
