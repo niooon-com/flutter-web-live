@@ -36,19 +36,19 @@ class _ChatsPageState extends State<ChatsPage> {
     }).toList();
 
     return GlassContainer(
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header with Logo & New Chat action
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
             child: Row(
               children: [
                 const Text(
                   "niooo",
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.w900,
                     letterSpacing: -0.5,
                     color: Colors.white,
@@ -58,7 +58,7 @@ class _ChatsPageState extends State<ChatsPage> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
+                    color: const Color(0xFF00E5FF).withValues(alpha: 0.18),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4)),
                   ),
@@ -75,6 +75,7 @@ class _ChatsPageState extends State<ChatsPage> {
                 GlassIconButton(
                   icon: Icons.edit_note,
                   tooltip: "New Chat",
+                  size: 38,
                   onTap: () {},
                 ),
               ],
@@ -83,9 +84,9 @@ class _ChatsPageState extends State<ChatsPage> {
 
           // Search Bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Container(
-              height: 44,
+              height: 42,
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(14),
@@ -93,28 +94,28 @@ class _ChatsPageState extends State<ChatsPage> {
               ),
               child: TextField(
                 onChanged: (val) => setState(() => _searchQuery = val),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: const TextStyle(color: Colors.white, fontSize: 13.5),
                 decoration: const InputDecoration(
-                  hintText: "Search chats, messages, channels...",
+                  hintText: "Search chats, people, channels...",
                   hintStyle: TextStyle(color: Colors.white38, fontSize: 13),
-                  prefixIcon: Icon(Icons.search, color: Colors.white54, size: 20),
+                  prefixIcon: Icon(Icons.search, color: Colors.white54, size: 18),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(vertical: 10),
                 ),
               ),
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
 
           // Stories Row (WhatsApp / Telegram style)
           _buildStoriesRow(),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
 
           // Category Chips
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -128,19 +129,19 @@ class _ChatsPageState extends State<ChatsPage> {
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
           // Chat List Items
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              padding: const EdgeInsets.fromLTRB(6, 2, 6, 80), // bottom space for floating nav bar
               itemCount: filteredContacts.length,
               itemBuilder: (context, index) {
                 final contact = filteredContacts[index];
                 final isSelected = contact.id == widget.activeContact.id;
 
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 3),
+                  margin: const EdgeInsets.symmetric(vertical: 2.5),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? const Color(0xFF00E5FF).withValues(alpha: 0.12)
@@ -152,11 +153,11 @@ class _ChatsPageState extends State<ChatsPage> {
                   ),
                   child: ListTile(
                     onTap: () => widget.onSelectContact(contact),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     leading: Stack(
                       children: [
                         CircleAvatar(
-                          radius: 24,
+                          radius: 22,
                           backgroundImage: NetworkImage(contact.avatarUrl),
                         ),
                         if (contact.isOnline)
@@ -164,16 +165,16 @@ class _ChatsPageState extends State<ChatsPage> {
                             right: 0,
                             bottom: 0,
                             child: Container(
-                              width: 13,
-                              height: 13,
+                              width: 12,
+                              height: 12,
                               decoration: BoxDecoration(
                                 color: const Color(0xFF10B981),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: const Color(0xFF090D16), width: 2.2),
+                                border: Border.all(color: const Color(0xFF090D16), width: 2),
                                 boxShadow: [
                                   BoxShadow(
                                     color: const Color(0xFF10B981).withValues(alpha: 0.6),
-                                    blurRadius: 6,
+                                    blurRadius: 4,
                                   ),
                                 ],
                               ),
@@ -191,10 +192,11 @@ class _ChatsPageState extends State<ChatsPage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                              fontSize: 15,
+                              fontSize: 14.5,
                             ),
                           ),
                         ),
+                        const SizedBox(width: 4),
                         Text(
                           contact.time,
                           style: TextStyle(
@@ -206,7 +208,7 @@ class _ChatsPageState extends State<ChatsPage> {
                       ],
                     ),
                     subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 3),
                       child: Row(
                         children: [
                           Expanded(
@@ -216,25 +218,25 @@ class _ChatsPageState extends State<ChatsPage> {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: isSelected ? Colors.white70 : Colors.white54,
-                                fontSize: 13,
+                                fontSize: 12.5,
                               ),
                             ),
                           ),
                           if (contact.unreadCount > 0)
                             Container(
                               margin: const EdgeInsets.only(left: 6),
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
                                   colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
                                 ),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 "${contact.unreadCount}",
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 11,
+                                  fontSize: 10.5,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -254,10 +256,10 @@ class _ChatsPageState extends State<ChatsPage> {
 
   Widget _buildStoriesRow() {
     return SizedBox(
-      height: 78,
+      height: 74,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         children: [
           // My status add button
           Column(
@@ -265,8 +267,8 @@ class _ChatsPageState extends State<ChatsPage> {
               Stack(
                 children: [
                   Container(
-                    width: 52,
-                    height: 52,
+                    width: 48,
+                    height: 48,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white24, width: 1.5),
@@ -281,29 +283,29 @@ class _ChatsPageState extends State<ChatsPage> {
                     right: 0,
                     bottom: 0,
                     child: Container(
-                      width: 18,
-                      height: 18,
+                      width: 17,
+                      height: 17,
                       decoration: const BoxDecoration(
                         color: Color(0xFF00E5FF),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.add, color: Colors.black, size: 14),
+                      child: const Icon(Icons.add, color: Colors.black, size: 13),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
-              const Text("My Story", style: TextStyle(color: Colors.white60, fontSize: 11)),
+              const SizedBox(height: 3),
+              const Text("My Story", style: TextStyle(color: Colors.white60, fontSize: 10.5)),
             ],
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 12),
 
           // Stories from contacts
           for (var i = 0; i < widget.contacts.length && i < 4; i++) ...[
             Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(2.2),
+                  padding: const EdgeInsets.all(2.0),
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
@@ -317,19 +319,25 @@ class _ChatsPageState extends State<ChatsPage> {
                       color: Color(0xFF090D16),
                     ),
                     child: CircleAvatar(
-                      radius: 23,
+                      radius: 21,
                       backgroundImage: NetworkImage(widget.contacts[i].avatarUrl),
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.contacts[i].name.split(" ")[0],
-                  style: const TextStyle(color: Colors.white70, fontSize: 11),
+                const SizedBox(height: 3),
+                SizedBox(
+                  width: 52,
+                  child: Text(
+                    widget.contacts[i].name.split(" ")[0],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70, fontSize: 10.5),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: 12),
           ],
         ],
       ),
@@ -341,11 +349,11 @@ class _ChatsPageState extends State<ChatsPage> {
     return GestureDetector(
       onTap: () => setState(() => _selectedCategory = label),
       child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        margin: const EdgeInsets.only(right: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
           ),
@@ -354,7 +362,7 @@ class _ChatsPageState extends State<ChatsPage> {
           label,
           style: TextStyle(
             color: isSelected ? const Color(0xFF00E5FF) : Colors.white60,
-            fontSize: 12,
+            fontSize: 11.5,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
           ),
         ),
