@@ -2,7 +2,6 @@ import "dart:ui";
 import "package:flutter/material.dart";
 
 import "models/chat_models.dart";
-import "widgets/glass_container.dart";
 import "pages/chats_page.dart";
 import "pages/conversation_page.dart";
 import "pages/calls_page.dart";
@@ -46,7 +45,7 @@ class NioooMainScreen extends StatefulWidget {
 
 class _NioooMainScreenState extends State<NioooMainScreen> {
   int _activeNavIndex = 0; // 0: Chats, 1: Calls, 2: Channels, 3: Settings
-  bool _mobileShowChatDetail = false;
+  bool _isChatOpen = false; // When true, hides the bottom navigation bar!
 
   // Active call overlay state
   bool _isCallActive = false;
@@ -64,7 +63,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
       status: "online",
       isOnline: true,
-      lastMessage: "The new niooo glassmorphism UI looks unbelievable! 🔥",
+      lastMessage: "The new bottom glass navigation looks amazing! 🔥",
       time: "10:42 AM",
       unreadCount: 2,
       isPinned: true,
@@ -76,7 +75,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       avatarUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150",
       status: "3,420 members • 182 online",
       isOnline: true,
-      lastMessage: "Alex: We just merged the modular pages architecture!",
+      lastMessage: "Alex: Zero overflow responsive layouts configured!",
       time: "10:35 AM",
       unreadCount: 5,
       isGroup: true,
@@ -140,27 +139,27 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       "1": [
         ChatMessage(
           id: "m1",
-          text: "Hey! Have you seen the modular glass pages on niooo?",
+          text: "Hey! Have you seen the new bottom navigation bar on niooo?",
           isMe: false,
           time: "10:38 AM",
         ),
         ChatMessage(
           id: "m2",
-          text: "Yes! Each page is in its own separate file with frosted glass aesthetics.",
+          text: "Yes! When inside chat it hides automatically to give maximum screen space.",
           isMe: true,
           time: "10:39 AM",
           isRead: true,
         ),
         ChatMessage(
           id: "m3",
-          text: "Voice note with real-time audio soundwave is super responsive.",
+          text: "Voice note with real-time waveform visualization is super responsive.",
           isMe: false,
           time: "10:40 AM",
           attachmentType: "audio",
         ),
         ChatMessage(
           id: "m4",
-          text: "The new niooo glassmorphism UI looks unbelievable! 🔥",
+          text: "The new bottom glass navigation looks amazing! 🔥",
           isMe: false,
           time: "10:42 AM",
           reaction: "🔥",
@@ -175,7 +174,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         ),
         ChatMessage(
           id: "g2",
-          text: "Alex: We just merged the modular pages architecture!",
+          text: "Alex: Zero overflow responsive layouts configured!",
           isMe: false,
           time: "10:35 AM",
         ),
@@ -236,13 +235,13 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       _conversations[_activeContact.id]!.add(newMsg);
     });
 
-    // Auto-reply
-    Future.delayed(const Duration(milliseconds: 1200), () {
+    // Auto-reply simulation
+    Future.delayed(const Duration(milliseconds: 1100), () {
       if (mounted) {
         final replies = [
           "Got it! That looks super clean on niooo.",
-          "Awesome! The glassmorphism effect is so responsive.",
-          "Perfect! Love the modular architecture.",
+          "Awesome! The bottom navigation auto-hiding is so smooth.",
+          "Perfect! No text or icon overflows anywhere.",
           "✨ Received loud and clear.",
         ];
         final replyText = replies[DateTime.now().second % replies.length];
@@ -274,12 +273,16 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth >= 850;
+    final isDesktop = screenWidth >= 880;
+
+    // HIDE BOTTOM NAVIGATION BAR WHEN INSIDE CHAT DETAIL
+    final bool hideBottomNav = (_activeNavIndex == 0 && _isChatOpen);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Background ambient gradient glow
+          // Background ambient gradient glow orbs
           Positioned(
             top: -100,
             left: -100,
@@ -290,7 +293,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFF00E5FF).withValues(alpha: 0.15),
+                    const Color(0xFF00E5FF).withValues(alpha: 0.14),
                     Colors.transparent,
                   ],
                 ),
@@ -307,7 +310,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFF7C4DFF).withValues(alpha: 0.18),
+                    const Color(0xFF7C4DFF).withValues(alpha: 0.16),
                     Colors.transparent,
                   ],
                 ),
@@ -315,20 +318,13 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
             ),
           ),
 
-          // Main Layout
+          // Main Screen Body
           SafeArea(
-            child: Row(
-              children: [
-                // Glass Left Navigation Rail
-                _buildGlassNavRail(),
-
-                // Dynamic Body Content
-                Expanded(
-                  child: _buildBodyContent(isDesktop),
-                ),
-              ],
-            ),
+            child: _buildBodyContent(isDesktop),
           ),
+
+          // Modern Frosted Glass Bottom Navigation Bar (Hidden when inside chat!)
+          if (!hideBottomNav) _buildGlassBottomNavBar(),
 
           // Active Call Overlay Modal
           if (_isCallActive) _buildActiveCallOverlay(),
@@ -346,40 +342,36 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       return const SettingsPage();
     }
 
-    // Default: Chats
+    // Default: Tab 0 (Chats)
     if (isDesktop) {
-      return Row(
-        children: [
-          Expanded(
-            flex: 4,
-            child: ChatsPage(
-              contacts: _contacts,
-              activeContact: _activeContact,
-              onSelectContact: (contact) {
-                setState(() => _activeContact = contact);
-              },
+      // On desktop, if chat is open, user can see split view or full conversation with back button
+      if (_isChatOpen) {
+        return Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: ChatsPage(
+                contacts: _contacts,
+                activeContact: _activeContact,
+                onSelectContact: (contact) {
+                  setState(() {
+                    _activeContact = contact;
+                    _isChatOpen = true;
+                  });
+                },
+              ),
             ),
-          ),
-          Expanded(
-            flex: 7,
-            child: ConversationPage(
-              contact: _activeContact,
-              messages: _conversations[_activeContact.id] ?? [],
-              onSendMessage: _handleSendMessage,
-              onStartCall: _startCall,
+            Expanded(
+              flex: 7,
+              child: ConversationPage(
+                contact: _activeContact,
+                messages: _conversations[_activeContact.id] ?? [],
+                onSendMessage: _handleSendMessage,
+                onStartCall: _startCall,
+                onBack: () => setState(() => _isChatOpen = false),
+              ),
             ),
-          ),
-        ],
-      );
-    } else {
-      // Mobile adaptive view
-      if (_mobileShowChatDetail) {
-        return ConversationPage(
-          contact: _activeContact,
-          messages: _conversations[_activeContact.id] ?? [],
-          onSendMessage: _handleSendMessage,
-          onStartCall: _startCall,
-          onBack: () => setState(() => _mobileShowChatDetail = false),
+          ],
         );
       } else {
         return ChatsPage(
@@ -388,7 +380,29 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
           onSelectContact: (contact) {
             setState(() {
               _activeContact = contact;
-              _mobileShowChatDetail = true;
+              _isChatOpen = true;
+            });
+          },
+        );
+      }
+    } else {
+      // Mobile / Tablet view
+      if (_isChatOpen) {
+        return ConversationPage(
+          contact: _activeContact,
+          messages: _conversations[_activeContact.id] ?? [],
+          onSendMessage: _handleSendMessage,
+          onStartCall: _startCall,
+          onBack: () => setState(() => _isChatOpen = false),
+        );
+      } else {
+        return ChatsPage(
+          contacts: _contacts,
+          activeContact: _activeContact,
+          onSelectContact: (contact) {
+            setState(() {
+              _activeContact = contact;
+              _isChatOpen = true;
             });
           },
         );
@@ -396,121 +410,124 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
     }
   }
 
-  // Left Slim Glass Navigation Rail
-  Widget _buildGlassNavRail() {
-    return Container(
-      width: 72,
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFF10172A).withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 20,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Column(
-            children: [
-              const SizedBox(height: 18),
-              // niooo brand logo
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text(
-                    "n",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: "monospace",
-                    ),
-                  ),
-                ),
+  // Modern Floating Frosted Glass Bottom Navigation Bar
+  Widget _buildGlassBottomNavBar() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SafeArea(
+        top: false,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 520),
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F172A).withValues(alpha: 0.85),
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.45),
+                blurRadius: 20,
+                offset: const Offset(0, 6),
               ),
-              const SizedBox(height: 32),
-
-              // Nav Buttons
-              _navButton(0, Icons.chat_bubble_outline, Icons.chat_bubble, "Chats"),
-              const SizedBox(height: 16),
-              _navButton(1, Icons.call_outlined, Icons.call, "Calls"),
-              const SizedBox(height: 16),
-              _navButton(2, Icons.tag, Icons.tag, "Channels"),
-              const SizedBox(height: 16),
-              _navButton(3, Icons.settings_outlined, Icons.settings, "Settings"),
-
-              const Spacer(),
-
-              // User profile avatar in rail
-              Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF00E5FF), width: 2),
-                ),
-                child: const CircleAvatar(
-                  radius: 18,
-                  backgroundImage: NetworkImage(
-                    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
-                  ),
-                ),
+              BoxShadow(
+                color: const Color(0xFF00E5FF).withValues(alpha: 0.08),
+                blurRadius: 14,
+                spreadRadius: 1,
               ),
             ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _bottomNavItem(0, Icons.chat_bubble_outline, Icons.chat_bubble, "Chats", badgeCount: 7),
+                  _bottomNavItem(1, Icons.call_outlined, Icons.call, "Calls"),
+                  _bottomNavItem(2, Icons.tag, Icons.tag, "Channels"),
+                  _bottomNavItem(3, Icons.settings_outlined, Icons.settings, "Settings"),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _navButton(int index, IconData outlineIcon, IconData filledIcon, String tooltip) {
+  Widget _bottomNavItem(int index, IconData outlineIcon, IconData filledIcon, String label, {int badgeCount = 0}) {
     final isSelected = _activeNavIndex == index;
-    return Tooltip(
-      message: tooltip,
+    return Expanded(
       child: GestureDetector(
         onTap: () {
           setState(() {
             _activeNavIndex = index;
-            _mobileShowChatDetail = false;
+            _isChatOpen = false;
           });
         },
+        behavior: HitTestBehavior.opaque,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: 48,
-          height: 48,
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           decoration: BoxDecoration(
             color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.15) : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             border: isSelected
-                ? Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.5), width: 1.2)
+                ? Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.45), width: 1.1)
                 : Border.all(color: Colors.transparent),
           ),
-          child: Icon(
-            isSelected ? filledIcon : outlineIcon,
-            color: isSelected ? const Color(0xFF00E5FF) : Colors.white60,
-            size: 24,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(
+                    isSelected ? filledIcon : outlineIcon,
+                    color: isSelected ? const Color(0xFF00E5FF) : Colors.white60,
+                    size: 21,
+                  ),
+                  if (badgeCount > 0)
+                    Positioned(
+                      top: -3,
+                      right: -7,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.2),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          "$badgeCount",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 3),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: isSelected ? const Color(0xFF00E5FF) : Colors.white54,
+                    fontSize: 10.5,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -525,93 +542,99 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
           child: Center(
-            child: Container(
-              width: 380,
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: const Color(0xFF10172A).withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(32),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
-                    blurRadius: 32,
-                    spreadRadius: 4,
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: 110,
-                        height: 110,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4), width: 3),
-                        ),
-                      ),
-                      CircleAvatar(
-                        radius: 46,
-                        backgroundImage: NetworkImage(_activeContact.avatarUrl),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    _callingContactName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                width: 360,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10172A).withValues(alpha: 0.85),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
+                      blurRadius: 30,
+                      spreadRadius: 3,
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    "niooo Encrypted HD Call • 00:38",
-                    style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13),
-                  ),
-                  const SizedBox(height: 36),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _callCircleButton(
-                        icon: _isCallMuted ? Icons.mic_off : Icons.mic,
-                        isActive: _isCallMuted,
-                        onTap: () => setState(() => _isCallMuted = !_isCallMuted),
-                      ),
-                      const SizedBox(width: 20),
-                      _callCircleButton(
-                        icon: _isSpeakerOn ? Icons.volume_up : Icons.volume_off,
-                        isActive: _isSpeakerOn,
-                        onTap: () => setState(() => _isSpeakerOn = !_isSpeakerOn),
-                      ),
-                      const SizedBox(width: 20),
-                      GestureDetector(
-                        onTap: () => setState(() => _isCallActive = false),
-                        child: Container(
-                          width: 56,
-                          height: 56,
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFEF4444),
                             shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFEF4444).withValues(alpha: 0.5),
-                                blurRadius: 16,
-                              ),
-                            ],
+                            border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4), width: 3),
                           ),
-                          child: const Icon(Icons.call_end, color: Colors.white, size: 28),
                         ),
+                        CircleAvatar(
+                          radius: 42,
+                          backgroundImage: NetworkImage(_activeContact.avatarUrl),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      _callingContactName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      "niooo Encrypted HD Call • 00:38",
+                      style: TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
+                    ),
+                    const SizedBox(height: 28),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _callCircleButton(
+                          icon: _isCallMuted ? Icons.mic_off : Icons.mic,
+                          isActive: _isCallMuted,
+                          onTap: () => setState(() => _isCallMuted = !_isCallMuted),
+                        ),
+                        const SizedBox(width: 18),
+                        _callCircleButton(
+                          icon: _isSpeakerOn ? Icons.volume_up : Icons.volume_off,
+                          isActive: _isSpeakerOn,
+                          onTap: () => setState(() => _isSpeakerOn = !_isSpeakerOn),
+                        ),
+                        const SizedBox(width: 18),
+                        GestureDetector(
+                          onTap: () => setState(() => _isCallActive = false),
+                          child: Container(
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFEF4444).withValues(alpha: 0.5),
+                                  blurRadius: 14,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(Icons.call_end, color: Colors.white, size: 26),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -624,8 +647,8 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 52,
-        height: 52,
+        width: 48,
+        height: 48,
         decoration: BoxDecoration(
           color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.1),
           shape: BoxShape.circle,
@@ -634,7 +657,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         child: Icon(
           icon,
           color: isActive ? Colors.black : Colors.white,
-          size: 24,
+          size: 22,
         ),
       ),
     );
