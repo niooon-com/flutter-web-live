@@ -174,7 +174,7 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 _statCard("State Value", "$_counter", Icons.touch_app, Colors.cyan),
                 const SizedBox(width: 16),
-                _statCard("Runtime", "WASM / HTML", Icons.memory, Colors.emerald),
+                _statCard("Runtime", "WASM / HTML", Icons.memory, Colors.green),
                 const SizedBox(width: 16),
                 _statCard("CI/CD Pipeline", "GitHub Action", Icons.sync, Colors.purpleAccent),
               ],
