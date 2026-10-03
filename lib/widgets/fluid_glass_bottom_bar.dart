@@ -26,8 +26,8 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
     _NavItemData(
       index: 0,
       label: "Chats",
-      outlineIcon: Icons.chat_bubble_outline,
-      filledIcon: Icons.chat_bubble,
+      outlineIcon: Icons.chat_outlined,
+      filledIcon: Icons.chat,
       badgeCount: 7,
     ),
     _NavItemData(
@@ -39,9 +39,9 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
     ),
     _NavItemData(
       index: 2,
-      label: "Channels",
-      outlineIcon: Icons.tag,
-      filledIcon: Icons.tag,
+      label: "Updates",
+      outlineIcon: Icons.sync_outlined,
+      filledIcon: Icons.motion_photos_on,
       badgeCount: 0,
     ),
     _NavItemData(
@@ -126,27 +126,39 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
       child: SafeArea(
         top: false,
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 520),
+          constraints: const BoxConstraints(maxWidth: 500),
           margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          // 3D Elevated Floating Capsule
           decoration: BoxDecoration(
-            color: const Color(0xFF0F172A).withValues(alpha: 0.85),
-            borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+            color: const Color(0xFF1F2C34).withValues(alpha: 0.88),
+            borderRadius: BorderRadius.circular(34),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.15),
+              width: 1.2,
+            ),
             boxShadow: [
+              // Deep bottom shadow for 3D elevation
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
-                blurRadius: 24,
-                offset: const Offset(0, 8),
+                color: Colors.black.withValues(alpha: 0.65),
+                blurRadius: 26,
+                offset: const Offset(0, 10),
               ),
+              // Soft emerald ambient reflection
               BoxShadow(
-                color: const Color(0xFF00E5FF).withValues(alpha: 0.12),
-                blurRadius: 18,
-                spreadRadius: 1,
+                color: const Color(0xFF00A884).withValues(alpha: 0.18),
+                blurRadius: 20,
+                offset: const Offset(0, 2),
+              ),
+              // Top specular light bevel
+              BoxShadow(
+                color: Colors.white.withValues(alpha: 0.1),
+                blurRadius: 5,
+                offset: const Offset(-1, -2),
               ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(34),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: Padding(
@@ -163,10 +175,10 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
                       onHorizontalDragUpdate: (details) => _handleDragUpdate(details, tabWidth),
                       onHorizontalDragEnd: (details) => _handleDragEnd(details, tabWidth),
                       child: SizedBox(
-                        height: 52,
+                        height: 54,
                         child: Stack(
                           children: [
-                            // Interactive Fluid Sliding Pill
+                            // 3D Embossed Interactive Sliding Pill
                             Positioned(
                               left: pillLeft,
                               top: 2,
@@ -175,24 +187,37 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
                               child: Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 decoration: BoxDecoration(
+                                  // WhatsApp 3D Emerald tactile gradient
                                   gradient: LinearGradient(
                                     colors: [
-                                      const Color(0xFF00E5FF).withValues(alpha: _isDragging ? 0.35 : 0.22),
-                                      const Color(0xFF7C4DFF).withValues(alpha: _isDragging ? 0.35 : 0.22),
+                                      const Color(0xFF00A884).withValues(alpha: _isDragging ? 0.95 : 0.82),
+                                      const Color(0xFF005C4B).withValues(alpha: _isDragging ? 0.95 : 0.85),
                                     ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
                                   ),
-                                  borderRadius: BorderRadius.circular(24),
+                                  borderRadius: BorderRadius.circular(26),
                                   border: Border.all(
-                                    color: const Color(0xFF00E5FF).withValues(alpha: _isDragging ? 0.8 : 0.5),
-                                    width: 1.3,
+                                    color: const Color(0xFF25D366).withValues(alpha: _isDragging ? 0.9 : 0.65),
+                                    width: 1.4,
                                   ),
                                   boxShadow: [
+                                    // 3D tactile pill drop shadow
                                     BoxShadow(
-                                      color: const Color(0xFF00E5FF).withValues(alpha: _isDragging ? 0.4 : 0.2),
-                                      blurRadius: _isDragging ? 16 : 10,
-                                      spreadRadius: _isDragging ? 2 : 0,
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                    BoxShadow(
+                                      color: const Color(0xFF25D366).withValues(alpha: _isDragging ? 0.5 : 0.3),
+                                      blurRadius: _isDragging ? 16 : 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                    // Top bevel highlight
+                                    BoxShadow(
+                                      color: Colors.white.withValues(alpha: 0.25),
+                                      blurRadius: 3,
+                                      offset: const Offset(0, -1),
                                     ),
                                   ],
                                 ),
@@ -221,40 +246,40 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
                                             clipBehavior: Clip.none,
                                             children: [
                                               AnimatedScale(
-                                                scale: isHovered ? 1.12 : 1.0,
+                                                scale: isHovered ? 1.15 : 1.0,
                                                 duration: const Duration(milliseconds: 180),
                                                 child: Icon(
                                                   isHovered ? item.filledIcon : item.outlineIcon,
                                                   color: isHovered
-                                                      ? const Color(0xFF00E5FF)
-                                                      : Colors.white54,
-                                                  size: 21,
+                                                      ? Colors.white
+                                                      : const Color(0xFF8696A0),
+                                                  size: 22,
                                                 ),
                                               ),
                                               if (item.badgeCount > 0)
                                                 Positioned(
                                                   top: -4,
-                                                  right: -8,
+                                                  right: -9,
                                                   child: Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.2),
+                                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                                                     decoration: BoxDecoration(
-                                                      gradient: const LinearGradient(
-                                                        colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
-                                                      ),
+                                                      color: const Color(0xFF25D366),
                                                       borderRadius: BorderRadius.circular(10),
+                                                      border: Border.all(color: const Color(0xFF111B21), width: 1.5),
                                                       boxShadow: [
                                                         BoxShadow(
-                                                          color: const Color(0xFF00E5FF).withValues(alpha: 0.5),
-                                                          blurRadius: 4,
+                                                          color: const Color(0xFF25D366).withValues(alpha: 0.6),
+                                                          blurRadius: 6,
+                                                          offset: const Offset(0, 1),
                                                         ),
                                                       ],
                                                     ),
                                                     child: Text(
                                                       "${item.badgeCount}",
                                                       style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 9,
-                                                        fontWeight: FontWeight.bold,
+                                                        color: Color(0xFF111B21),
+                                                        fontSize: 9.5,
+                                                        fontWeight: FontWeight.w900,
                                                       ),
                                                     ),
                                                   ),
@@ -271,11 +296,11 @@ class _FluidGlassBottomBarState extends State<FluidGlassBottomBar>
                                               style: TextStyle(
                                                 color: isHovered
                                                     ? Colors.white
-                                                    : Colors.white54,
+                                                    : const Color(0xFF8696A0),
                                                 fontSize: 10.5,
                                                 fontWeight: isHovered
                                                     ? FontWeight.bold
-                                                    : FontWeight.normal,
+                                                    : FontWeight.w500,
                                               ),
                                             ),
                                           ),
