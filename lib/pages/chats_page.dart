@@ -36,11 +36,12 @@ class _ChatsPageState extends State<ChatsPage> {
     }).toList();
 
     return GlassContainer(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+      backgroundColor: const Color(0xFF111B21).withValues(alpha: 0.85),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with Logo & New Chat action
+          // Header with WhatsApp aesthetic & 3D New Chat button
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
             child: Row(
@@ -48,32 +49,41 @@ class _ChatsPageState extends State<ChatsPage> {
                 const Text(
                   "niooo",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 23,
                     fontWeight: FontWeight.w900,
                     letterSpacing: -0.5,
-                    color: Colors.white,
+                    color: Color(0xFFE9EDEF),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00E5FF).withValues(alpha: 0.18),
+                    color: const Color(0xFF00A884).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4)),
+                    border: Border.all(color: const Color(0xFF00A884).withValues(alpha: 0.5)),
                   ),
                   child: const Text(
-                    "CHAT",
+                    "CHATS",
                     style: TextStyle(
-                      color: Color(0xFF00E5FF),
+                      color: Color(0xFF25D366),
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
+                      letterSpacing: 0.8,
                     ),
                   ),
                 ),
                 const Spacer(),
+                // 3D Elevated Camera & New Chat buttons
                 GlassIconButton(
-                  icon: Icons.edit_note,
+                  icon: Icons.camera_alt_outlined,
+                  tooltip: "Camera",
+                  size: 38,
+                  onTap: () {},
+                ),
+                const SizedBox(width: 8),
+                GlassIconButton(
+                  icon: Icons.edit_note_rounded,
                   tooltip: "New Chat",
                   size: 38,
                   onTap: () {},
@@ -82,23 +92,30 @@ class _ChatsPageState extends State<ChatsPage> {
             ),
           ),
 
-          // Search Bar
+          // WhatsApp Dark Search Bar with 3D inset depth
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Container(
               height: 42,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: const Color(0xFF202C33),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: TextField(
                 onChanged: (val) => setState(() => _searchQuery = val),
-                style: const TextStyle(color: Colors.white, fontSize: 13.5),
+                style: const TextStyle(color: Color(0xFFE9EDEF), fontSize: 13.5),
                 decoration: const InputDecoration(
-                  hintText: "Search chats, people, channels...",
-                  hintStyle: TextStyle(color: Colors.white38, fontSize: 13),
-                  prefixIcon: Icon(Icons.search, color: Colors.white54, size: 18),
+                  hintText: "Search or start new chat...",
+                  hintStyle: TextStyle(color: Color(0xFF8696A0), fontSize: 13),
+                  prefixIcon: Icon(Icons.search, color: Color(0xFF00A884), size: 19),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 10),
                 ),
@@ -108,12 +125,12 @@ class _ChatsPageState extends State<ChatsPage> {
 
           const SizedBox(height: 12),
 
-          // Stories Row (WhatsApp / Telegram style)
+          // WhatsApp Status Stories Row with emerald glow rings
           _buildStoriesRow(),
 
           const SizedBox(height: 10),
 
-          // Category Chips
+          // 3D Elevated Filter Category Chips
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: SingleChildScrollView(
@@ -134,30 +151,39 @@ class _ChatsPageState extends State<ChatsPage> {
           // Chat List Items
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(6, 2, 6, 80), // bottom space for floating nav bar
+              padding: const EdgeInsets.fromLTRB(6, 2, 6, 85),
               itemCount: filteredContacts.length,
               itemBuilder: (context, index) {
                 final contact = filteredContacts[index];
                 final isSelected = contact.id == widget.activeContact.id;
 
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 2.5),
+                  margin: const EdgeInsets.symmetric(vertical: 3),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? const Color(0xFF00E5FF).withValues(alpha: 0.12)
+                        ? const Color(0xFF00A884).withValues(alpha: 0.15)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(16),
                     border: isSelected
-                        ? Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.3))
+                        ? Border.all(color: const Color(0xFF00A884).withValues(alpha: 0.4), width: 1.2)
                         : Border.all(color: Colors.transparent),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: const Color(0xFF00A884).withValues(alpha: 0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
                   ),
                   child: ListTile(
                     onTap: () => widget.onSelectContact(contact),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     leading: Stack(
                       children: [
                         CircleAvatar(
-                          radius: 22,
+                          radius: 23,
                           backgroundImage: NetworkImage(contact.avatarUrl),
                         ),
                         if (contact.isOnline)
@@ -168,12 +194,12 @@ class _ChatsPageState extends State<ChatsPage> {
                               width: 12,
                               height: 12,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF10B981),
+                                color: const Color(0xFF25D366),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: const Color(0xFF090D16), width: 2),
+                                border: Border.all(color: const Color(0xFF111B21), width: 2),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(0xFF10B981).withValues(alpha: 0.6),
+                                    color: const Color(0xFF25D366).withValues(alpha: 0.6),
                                     blurRadius: 4,
                                   ),
                                 ],
@@ -190,7 +216,7 @@ class _ChatsPageState extends State<ChatsPage> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: const Color(0xFFE9EDEF),
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                               fontSize: 14.5,
                             ),
@@ -200,7 +226,7 @@ class _ChatsPageState extends State<ChatsPage> {
                         Text(
                           contact.time,
                           style: TextStyle(
-                            color: contact.unreadCount > 0 ? const Color(0xFF00E5FF) : Colors.white38,
+                            color: contact.unreadCount > 0 ? const Color(0xFF25D366) : const Color(0xFF8696A0),
                             fontSize: 11,
                             fontWeight: contact.unreadCount > 0 ? FontWeight.bold : FontWeight.normal,
                           ),
@@ -217,7 +243,7 @@ class _ChatsPageState extends State<ChatsPage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: isSelected ? Colors.white70 : Colors.white54,
+                                color: isSelected ? const Color(0xFFE9EDEF) : const Color(0xFF8696A0),
                                 fontSize: 12.5,
                               ),
                             ),
@@ -225,19 +251,23 @@ class _ChatsPageState extends State<ChatsPage> {
                           if (contact.unreadCount > 0)
                             Container(
                               margin: const EdgeInsets.only(left: 6),
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                              padding: const EdgeInsets.symmetric(horizontal: 6.5, vertical: 2),
                               decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
-                                ),
-                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xFF25D366),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF25D366).withValues(alpha: 0.5),
+                                    blurRadius: 6,
+                                  ),
+                                ],
                               ),
                               child: Text(
                                 "${contact.unreadCount}",
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Color(0xFF111B21),
                                   fontSize: 10.5,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w900,
                                 ),
                               ),
                             ),
@@ -256,12 +286,12 @@ class _ChatsPageState extends State<ChatsPage> {
 
   Widget _buildStoriesRow() {
     return SizedBox(
-      height: 74,
+      height: 76,
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         children: [
-          // My status add button
+          // WhatsApp My Status Add Button
           Column(
             children: [
               Stack(
@@ -283,43 +313,52 @@ class _ChatsPageState extends State<ChatsPage> {
                     right: 0,
                     bottom: 0,
                     child: Container(
-                      width: 17,
-                      height: 17,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF00E5FF),
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF00A884),
                         shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFF111B21), width: 1.5),
                       ),
-                      child: const Icon(Icons.add, color: Colors.black, size: 13),
+                      child: const Icon(Icons.add, color: Colors.white, size: 13),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 3),
-              const Text("My Story", style: TextStyle(color: Colors.white60, fontSize: 10.5)),
+              const Text("My Status", style: TextStyle(color: Color(0xFF8696A0), fontSize: 10.5)),
             ],
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
 
-          // Stories from contacts
+          // Stories with WhatsApp green rings
           for (var i = 0; i < widget.contacts.length && i < 4; i++) ...[
             Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(2.0),
-                  decoration: const BoxDecoration(
+                  padding: const EdgeInsets.all(2.2),
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF), Color(0xFFFF2A85)],
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF25D366), Color(0xFF00A884)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF00A884).withValues(alpha: 0.3),
+                        blurRadius: 6,
+                      ),
+                    ],
                   ),
                   child: Container(
                     padding: const EdgeInsets.all(1.5),
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFF090D16),
+                      color: Color(0xFF111B21),
                     ),
                     child: CircleAvatar(
-                      radius: 21,
+                      radius: 20,
                       backgroundImage: NetworkImage(widget.contacts[i].avatarUrl),
                     ),
                   ),
@@ -332,7 +371,7 @@ class _ChatsPageState extends State<ChatsPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70, fontSize: 10.5),
+                    style: const TextStyle(color: Color(0xFFE9EDEF), fontSize: 10.5),
                   ),
                 ),
               ],
@@ -344,24 +383,45 @@ class _ChatsPageState extends State<ChatsPage> {
     );
   }
 
+  // 3D Elevated Filter Category Chip
   Widget _categoryChip(String label) {
     final isSelected = _selectedCategory == label;
     return GestureDetector(
       onTap: () => setState(() => _selectedCategory = label),
-      child: Container(
-        margin: const EdgeInsets.only(right: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 140),
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(14),
+          color: isSelected
+              ? const Color(0xFF00A884).withValues(alpha: 0.25)
+              : const Color(0xFF202C33),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+            color: isSelected
+                ? const Color(0xFF25D366).withValues(alpha: 0.7)
+                : Colors.white.withValues(alpha: 0.08),
+            width: 1.1,
           ),
+          boxShadow: [
+            // 3D tactile elevation
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.4),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+            if (isSelected)
+              BoxShadow(
+                color: const Color(0xFF00A884).withValues(alpha: 0.25),
+                blurRadius: 8,
+                offset: const Offset(0, 1),
+              ),
+          ],
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? const Color(0xFF00E5FF) : Colors.white60,
+            color: isSelected ? const Color(0xFF25D366) : const Color(0xFF8696A0),
             fontSize: 11.5,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
           ),
