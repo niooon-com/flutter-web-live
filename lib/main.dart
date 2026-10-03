@@ -23,11 +23,11 @@ class NioooApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF090D16),
+        scaffoldBackgroundColor: const Color(0xFF0B141A),
         colorScheme: ColorScheme.dark(
-          primary: const Color(0xFF00E5FF),
-          secondary: const Color(0xFF7C4DFF),
-          surface: const Color(0xFF131B2E).withValues(alpha: 0.6),
+          primary: const Color(0xFF00A884),
+          secondary: const Color(0xFF25D366),
+          surface: const Color(0xFF111B21).withValues(alpha: 0.8),
         ),
         fontFamily: "Roboto",
         useMaterial3: true,
@@ -45,7 +45,7 @@ class NioooMainScreen extends StatefulWidget {
 }
 
 class _NioooMainScreenState extends State<NioooMainScreen> {
-  int _activeNavIndex = 0; // 0: Chats, 1: Calls, 2: Channels, 3: Settings
+  int _activeNavIndex = 0; // 0: Chats, 1: Calls, 2: Updates, 3: Settings
   bool _isChatOpen = false; // When true, hides the bottom navigation bar!
 
   // Active call overlay state
@@ -64,7 +64,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
       status: "online",
       isOnline: true,
-      lastMessage: "The new bottom glass navigation looks amazing! 🔥",
+      lastMessage: "The new WhatsApp 3D dark mode looks super premium! ✨",
       time: "10:42 AM",
       unreadCount: 2,
       isPinned: true,
@@ -76,7 +76,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       avatarUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150",
       status: "3,420 members • 182 online",
       isOnline: true,
-      lastMessage: "Alex: Zero overflow responsive layouts configured!",
+      lastMessage: "Alex: 3D embossed buttons and emerald glass live!",
       time: "10:35 AM",
       unreadCount: 5,
       isGroup: true,
@@ -111,7 +111,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       avatarUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
       status: "Verified Channel",
       isOnline: true,
-      lastMessage: "🚀 niooo v2.0 Released: Real-time End-to-End Encrypted Chat",
+      lastMessage: "🚀 niooo v2.5: WhatsApp Dark Mode & 3D Glass UI",
       time: "Yesterday",
       unreadCount: 0,
       isGroup: true,
@@ -140,13 +140,13 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       "1": [
         ChatMessage(
           id: "m1",
-          text: "Hey! Have you seen the new bottom navigation bar on niooo?",
+          text: "Hey! Have you seen the new WhatsApp dark mode on niooo?",
           isMe: false,
           time: "10:38 AM",
         ),
         ChatMessage(
           id: "m2",
-          text: "Yes! When inside chat it hides automatically to give maximum screen space.",
+          text: "Yes! The emerald glass bubbles and 3D floating buttons look incredible.",
           isMe: true,
           time: "10:39 AM",
           isRead: true,
@@ -160,10 +160,10 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         ),
         ChatMessage(
           id: "m4",
-          text: "The new bottom glass navigation looks amazing! 🔥",
+          text: "The new WhatsApp 3D dark mode looks super premium! ✨",
           isMe: false,
           time: "10:42 AM",
-          reaction: "🔥",
+          reaction: "💚",
         ),
       ],
       "2": [
@@ -175,7 +175,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         ),
         ChatMessage(
           id: "g2",
-          text: "Alex: Zero overflow responsive layouts configured!",
+          text: "Alex: 3D embossed buttons and emerald glass live!",
           isMe: false,
           time: "10:35 AM",
         ),
@@ -205,7 +205,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       "5": [
         ChatMessage(
           id: "c1",
-          text: "🚀 niooo v2.0 Released: Real-time End-to-End Encrypted Chat",
+          text: "🚀 niooo v2.5: WhatsApp Dark Mode & 3D Glass UI",
           isMe: false,
           time: "Yesterday",
         ),
@@ -240,10 +240,10 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
     Future.delayed(const Duration(milliseconds: 1100), () {
       if (mounted) {
         final replies = [
-          "Got it! That looks super clean on niooo.",
-          "Awesome! The bottom navigation auto-hiding is so smooth.",
-          "Perfect! No text or icon overflows anywhere.",
-          "✨ Received loud and clear.",
+          "Super sleek! That 3D raised button feels tangible.",
+          "The WhatsApp dark emerald colors are so comfortable on the eyes.",
+          "Loved the drag-to-select fluid navigation!",
+          "💚 End-to-end encrypted and lightning fast.",
         ];
         final replyText = replies[DateTime.now().second % replies.length];
 
@@ -254,7 +254,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
               text: replyText,
               isMe: false,
               time: "${TimeOfDay.now().hour}:${TimeOfDay.now().minute.toString().padLeft(2, '0')}",
-              reaction: "❤️",
+              reaction: "✨",
             ),
           );
         });
@@ -283,18 +283,18 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Background ambient gradient glow orbs
+          // WhatsApp dark ambient emerald glows
           Positioned(
-            top: -100,
+            top: -120,
             left: -100,
             child: Container(
-              width: 450,
-              height: 450,
+              width: 480,
+              height: 480,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFF00E5FF).withValues(alpha: 0.14),
+                    const Color(0xFF00A884).withValues(alpha: 0.12),
                     Colors.transparent,
                   ],
                 ),
@@ -311,7 +311,7 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFF7C4DFF).withValues(alpha: 0.16),
+                    const Color(0xFF005C4B).withValues(alpha: 0.16),
                     Colors.transparent,
                   ],
                 ),
@@ -438,14 +438,19 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                 width: 360,
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10172A).withValues(alpha: 0.85),
+                  color: const Color(0xFF1F2C34).withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(28),
                   border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
+                      color: Colors.black.withValues(alpha: 0.6),
                       blurRadius: 30,
-                      spreadRadius: 3,
+                      offset: const Offset(0, 10),
+                    ),
+                    BoxShadow(
+                      color: const Color(0xFF00A884).withValues(alpha: 0.25),
+                      blurRadius: 20,
+                      spreadRadius: 2,
                     ),
                   ],
                 ),
@@ -456,15 +461,21 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: 100,
-                          height: 100,
+                          width: 102,
+                          height: 102,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4), width: 3),
+                            border: Border.all(color: const Color(0xFF25D366).withValues(alpha: 0.5), width: 3),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF00A884).withValues(alpha: 0.35),
+                                blurRadius: 12,
+                              ),
+                            ],
                           ),
                         ),
                         CircleAvatar(
-                          radius: 42,
+                          radius: 44,
                           backgroundImage: NetworkImage(_activeContact.avatarUrl),
                         ),
                       ],
@@ -476,15 +487,15 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Color(0xFFE9EDEF),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 5),
                     const Text(
-                      "niooo Encrypted HD Call • 00:38",
-                      style: TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
+                      "WhatsApp Encrypted HD Call • 00:38",
+                      style: TextStyle(color: Color(0xFF25D366), fontSize: 12),
                     ),
                     const SizedBox(height: 28),
 
@@ -509,12 +520,14 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
                             width: 52,
                             height: 52,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEF4444),
+                              color: const Color(0xFFEA0038),
                               shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1.2),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFFEF4444).withValues(alpha: 0.5),
+                                  color: const Color(0xFFEA0038).withValues(alpha: 0.5),
                                   blurRadius: 14,
+                                  offset: const Offset(0, 4),
                                 ),
                               ],
                             ),
@@ -540,13 +553,23 @@ class _NioooMainScreenState extends State<NioooMainScreen> {
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.1),
+          color: isActive ? Colors.white : const Color(0xFF202C33),
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+          border: Border.all(
+            color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.15),
+            width: 1.1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Icon(
           icon,
-          color: isActive ? Colors.black : Colors.white,
+          color: isActive ? const Color(0xFF111B21) : const Color(0xFFE9EDEF),
           size: 22,
         ),
       ),
