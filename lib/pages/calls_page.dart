@@ -52,11 +52,12 @@ class CallsPage extends StatelessWidget {
     ];
 
     return GlassContainer(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+      backgroundColor: const Color(0xFF111B21).withValues(alpha: 0.85),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // Header with WhatsApp aesthetic
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
             child: Row(
@@ -64,42 +65,40 @@ class CallsPage extends StatelessWidget {
                 const Text(
                   "Calls",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 23,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Color(0xFFE9EDEF),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                    color: const Color(0xFF00A884).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.4)),
+                    border: Border.all(color: const Color(0xFF00A884).withValues(alpha: 0.5)),
                   ),
                   child: const Text(
-                    "HD ENCRYPTED",
+                    "ENCRYPTED",
                     style: TextStyle(
-                      color: Color(0xFF10B981),
+                      color: Color(0xFF25D366),
                       fontSize: 9.5,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 const Spacer(),
+                // 3D Elevated Start Call Button
                 GlassButton(
                   onTap: () => onStartCall("Sophia Carter", false),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF00E5FF), Color(0xFF0284C7)],
-                  ),
                   borderRadius: 14,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: const [
-                      Icon(Icons.add_call, color: Colors.white, size: 15),
-                      SizedBox(width: 5),
-                      Text("New Call", style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                      Icon(Icons.add_call, color: Colors.white, size: 16),
+                      SizedBox(width: 6),
+                      Text("New Call", style: TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -111,20 +110,20 @@ class CallsPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.04),
+                color: const Color(0xFF202C33),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
               ),
               child: Row(
                 children: const [
-                  Icon(Icons.lock_outline, color: Color(0xFF00E5FF), size: 16),
-                  SizedBox(width: 8),
+                  Icon(Icons.lock, color: Color(0xFF00A884), size: 16),
+                  SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      "Calls on niooo are secured with end-to-end Signal encryption.",
-                      style: TextStyle(color: Colors.white70, fontSize: 11.5),
+                      "Your personal calls are end-to-end encrypted. No one outside of this chat can hear them.",
+                      style: TextStyle(color: Color(0xFF8696A0), fontSize: 11.5),
                     ),
                   ),
                 ],
@@ -142,16 +141,23 @@ class CallsPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final log = callLogs[index];
                 return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 3.5),
+                  margin: const EdgeInsets.symmetric(vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
+                    color: const Color(0xFF202C33).withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     leading: CircleAvatar(
-                      radius: 22,
+                      radius: 23,
                       backgroundImage: NetworkImage(log.avatarUrl),
                     ),
                     title: Text(
@@ -159,7 +165,7 @@ class CallsPage extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: log.isMissed ? const Color(0xFFEF4444) : Colors.white,
+                        color: log.isMissed ? const Color(0xFFEA0038) : const Color(0xFFE9EDEF),
                         fontWeight: FontWeight.w600,
                         fontSize: 14.5,
                       ),
@@ -168,18 +174,18 @@ class CallsPage extends StatelessWidget {
                       children: [
                         Icon(
                           log.isOutgoing ? Icons.call_made : Icons.call_received,
-                          size: 13,
+                          size: 14,
                           color: log.isMissed
-                              ? const Color(0xFFEF4444)
-                              : (log.isOutgoing ? const Color(0xFF00E5FF) : const Color(0xFF10B981)),
+                              ? const Color(0xFFEA0038)
+                              : (log.isOutgoing ? const Color(0xFF25D366) : const Color(0xFF00A884)),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Text(
                             log.time,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: Colors.white54, fontSize: 11.5),
+                            style: const TextStyle(color: Color(0xFF8696A0), fontSize: 12),
                           ),
                         ),
                       ],
@@ -187,17 +193,20 @@ class CallsPage extends StatelessWidget {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // 3D Call Buttons
                         GlassIconButton(
-                          icon: Icons.phone_outlined,
+                          icon: Icons.call,
                           tooltip: "Voice Call",
-                          size: 34,
+                          size: 36,
+                          color: const Color(0xFF00A884),
                           onTap: () => onStartCall(log.name, false),
                         ),
-                        const SizedBox(width: 6),
+                        const SizedBox(width: 8),
                         GlassIconButton(
-                          icon: Icons.videocam_outlined,
+                          icon: Icons.videocam,
                           tooltip: "Video Call",
-                          size: 34,
+                          size: 36,
+                          color: const Color(0xFF00A884),
                           onTap: () => onStartCall(log.name, true),
                         ),
                       ],
