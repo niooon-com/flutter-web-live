@@ -13,16 +13,17 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _notifications = true;
   bool _soundEnabled = true;
   bool _readReceipts = true;
-  String _selectedTheme = "Dark Glass";
+  String _selectedTheme = "WhatsApp Dark";
 
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+      backgroundColor: const Color(0xFF111B21).withValues(alpha: 0.85),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // Header with WhatsApp aesthetic
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
             child: Row(
@@ -30,23 +31,23 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Text(
                   "Settings",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 23,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Color(0xFFE9EDEF),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF00E5FF).withValues(alpha: 0.15),
+                    color: const Color(0xFF00A884).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.4)),
+                    border: Border.all(color: const Color(0xFF00A884).withValues(alpha: 0.5)),
                   ),
                   child: const Text(
                     "PREFERENCES",
                     style: TextStyle(
-                      color: Color(0xFF00E5FF),
+                      color: Color(0xFF25D366),
                       fontSize: 9.5,
                       fontWeight: FontWeight.bold,
                     ),
@@ -61,17 +62,25 @@ class _SettingsPageState extends State<SettingsPage> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(14, 2, 14, 85),
               children: [
-                // Profile Card
+                // 3D Elevated Profile Card
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: const Color(0xFF202C33),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.4),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                      BoxShadow(
+                        color: const Color(0xFF00A884).withValues(alpha: 0.1),
+                        blurRadius: 12,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
@@ -79,11 +88,17 @@ class _SettingsPageState extends State<SettingsPage> {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(2.5),
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF25D366), Color(0xFF00A884)],
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF00A884).withValues(alpha: 0.4),
+                                  blurRadius: 6,
+                                ),
+                              ],
                             ),
                             child: const CircleAvatar(
                               radius: 28,
@@ -96,12 +111,13 @@ class _SettingsPageState extends State<SettingsPage> {
                             right: 0,
                             bottom: 0,
                             child: Container(
-                              padding: const EdgeInsets.all(3.5),
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF00E5FF),
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF00A884),
                                 shape: BoxShape.circle,
+                                border: Border.all(color: const Color(0xFF111B21), width: 1.5),
                               ),
-                              child: const Icon(Icons.camera_alt, color: Colors.black, size: 12),
+                              child: const Icon(Icons.camera_alt, color: Colors.white, size: 12),
                             ),
                           ),
                         ],
@@ -116,7 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Color(0xFFE9EDEF),
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -126,22 +142,23 @@ class _SettingsPageState extends State<SettingsPage> {
                               "@rayhan_niooo",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Color(0xFF00E5FF), fontSize: 12),
+                              style: TextStyle(color: Color(0xFF25D366), fontSize: 12),
                             ),
                             SizedBox(height: 4),
                             Text(
-                              "Hey there! I am using niooo ✨",
+                              "Available • Using niooo WhatsApp 3D ✨",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.white60, fontSize: 11),
+                              style: TextStyle(color: Color(0xFF8696A0), fontSize: 11),
                             ),
                           ],
                         ),
                       ),
                       GlassIconButton(
-                        icon: Icons.edit,
-                        tooltip: "Edit Profile",
-                        size: 36,
+                        icon: Icons.qr_code,
+                        tooltip: "QR Code",
+                        size: 38,
+                        color: const Color(0xFF00A884),
                         onTap: () {},
                       ),
                     ],
@@ -154,27 +171,27 @@ class _SettingsPageState extends State<SettingsPage> {
                 _sectionTitle("PRIVACY & SECURITY"),
                 _settingsCard([
                   _switchTile(
-                    icon: Icons.lock_outline,
-                    iconColor: const Color(0xFF00E5FF),
+                    icon: Icons.lock,
+                    iconColor: const Color(0xFF00A884),
                     title: "End-to-End Encryption",
                     subtitle: "All chats encrypted via Signal Protocol",
                     value: true,
                     onChanged: null,
                   ),
-                  const Divider(height: 1, color: Colors.white10),
+                  const Divider(height: 1, color: Color(0xFF222D34)),
                   _switchTile(
-                    icon: Icons.shield_outlined,
-                    iconColor: const Color(0xFF10B981),
+                    icon: Icons.security,
+                    iconColor: const Color(0xFF25D366),
                     title: "Two-Step Verification",
-                    subtitle: "Extra passcode required when logging in",
+                    subtitle: "Extra PIN required when registering phone",
                     value: _twoStepAuth,
                     onChanged: (val) => setState(() => _twoStepAuth = val),
                   ),
-                  const Divider(height: 1, color: Colors.white10),
+                  const Divider(height: 1, color: Color(0xFF222D34)),
                   _switchTile(
                     icon: Icons.done_all,
-                    iconColor: const Color(0xFF38BDF8),
-                    title: "Read Receipts (Double Blue Ticks)",
+                    iconColor: const Color(0xFF53BDEB), // WhatsApp blue ticks
+                    title: "Read Receipts (Blue Ticks)",
                     subtitle: "Let contacts know when you read messages",
                     value: _readReceipts,
                     onChanged: (val) => setState(() => _readReceipts = val),
@@ -183,7 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 const SizedBox(height: 18),
 
-                // Section: Appearance & Glass Themes
+                // Section: Appearance & 3D Glass Themes
                 _sectionTitle("APPEARANCE & THEMES"),
                 _settingsCard([
                   Padding(
@@ -192,19 +209,19 @@ class _SettingsPageState extends State<SettingsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          "Active Glass Theme",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13.5),
+                          "Active Theme Style",
+                          style: TextStyle(color: Color(0xFFE9EDEF), fontWeight: FontWeight.w600, fontSize: 13.5),
                         ),
                         const SizedBox(height: 10),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              _themeChip("Dark Glass"),
+                              _themeChip("WhatsApp Dark"),
                               const SizedBox(width: 8),
-                              _themeChip("Radiant Cyan"),
+                              _themeChip("Emerald Glass 3D"),
                               const SizedBox(width: 8),
-                              _themeChip("Midnight OLED"),
+                              _themeChip("OLED Deep Black"),
                             ],
                           ),
                         ),
@@ -219,19 +236,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 _sectionTitle("NOTIFICATIONS & SOUNDS"),
                 _settingsCard([
                   _switchTile(
-                    icon: Icons.notifications_active_outlined,
-                    iconColor: const Color(0xFFF59E0B),
-                    title: "Push Notifications",
-                    subtitle: "Receive live alerts for new chats",
+                    icon: Icons.notifications,
+                    iconColor: const Color(0xFF25D366),
+                    title: "Message Notifications",
+                    subtitle: "Show preview and tone for incoming chats",
                     value: _notifications,
                     onChanged: (val) => setState(() => _notifications = val),
                   ),
-                  const Divider(height: 1, color: Colors.white10),
+                  const Divider(height: 1, color: Color(0xFF222D34)),
                   _switchTile(
-                    icon: Icons.volume_up_outlined,
-                    iconColor: const Color(0xFFEC4899),
-                    title: "In-App Audio Sounds",
-                    subtitle: "Play sound effect on sending messages",
+                    icon: Icons.volume_up,
+                    iconColor: const Color(0xFF00A884),
+                    title: "Conversation Tones",
+                    subtitle: "Play sounds for outgoing and incoming messages",
                     value: _soundEnabled,
                     onChanged: (val) => setState(() => _soundEnabled = val),
                   ),
@@ -244,27 +261,40 @@ class _SettingsPageState extends State<SettingsPage> {
                 Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
+                    color: const Color(0xFF202C33),
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.35),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 42,
+                        height: 42,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF00E5FF), Color(0xFF7C4DFF)],
+                            colors: [Color(0xFF25D366), Color(0xFF00A884)],
                           ),
                           borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF00A884).withValues(alpha: 0.4),
+                              blurRadius: 8,
+                            ),
+                          ],
                         ),
                         child: const Center(
                           child: Text(
                             "n",
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
+                              color: Color(0xFF111B21),
+                              fontSize: 24,
                               fontWeight: FontWeight.w900,
                               fontFamily: "monospace",
                             ),
@@ -277,17 +307,17 @@ class _SettingsPageState extends State<SettingsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              "niooo for Web & Mobile",
+                              "niooo WhatsApp Edition 2.5",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13.5),
+                              style: TextStyle(color: Color(0xFFE9EDEF), fontWeight: FontWeight.bold, fontSize: 14),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "Version 2.0.0 • Flutter Web WASM",
+                              "Dark Mode • 3D Tactile Glass • Flutter 3.29",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.white54, fontSize: 11.5),
+                              style: TextStyle(color: Color(0xFF8696A0), fontSize: 11.5),
                             ),
                           ],
                         ),
@@ -311,8 +341,8 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Text(
         title,
         style: const TextStyle(
-          color: Color(0xFF00E5FF),
-          fontSize: 10.5,
+          color: Color(0xFF25D366),
+          fontSize: 11,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.1,
         ),
@@ -323,9 +353,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _settingsCard(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: const Color(0xFF202C33),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.35),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(children: children),
     );
@@ -348,49 +385,70 @@ class _SettingsPageState extends State<SettingsPage> {
           color: iconColor.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(icon, color: iconColor, size: 18),
+        child: Icon(icon, color: iconColor, size: 19),
       ),
       title: Text(
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: Colors.white, fontSize: 13.5, fontWeight: FontWeight.w600),
+        style: const TextStyle(color: Color(0xFFE9EDEF), fontSize: 14, fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
         subtitle,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: Colors.white54, fontSize: 11.5),
+        style: const TextStyle(color: Color(0xFF8696A0), fontSize: 11.5),
       ),
       trailing: Transform.scale(
         scale: 0.85,
         child: Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: const Color(0xFF00E5FF),
+          activeColor: const Color(0xFF25D366),
+          activeTrackColor: const Color(0xFF00A884).withValues(alpha: 0.4),
         ),
       ),
     );
   }
 
+  // 3D Elevated Theme Selection Chip
   Widget _themeChip(String label) {
     final isSelected = _selectedTheme == label;
     return GestureDetector(
       onTap: () => setState(() => _selectedTheme = label),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 140),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF00E5FF).withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(12),
+          color: isSelected
+              ? const Color(0xFF00A884).withValues(alpha: 0.3)
+              : const Color(0xFF111B21),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? const Color(0xFF00E5FF) : Colors.white.withValues(alpha: 0.1),
+            color: isSelected
+                ? const Color(0xFF25D366)
+                : Colors.white.withValues(alpha: 0.1),
+            width: 1.2,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.4),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+            if (isSelected)
+              BoxShadow(
+                color: const Color(0xFF25D366).withValues(alpha: 0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+          ],
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? const Color(0xFF00E5FF) : Colors.white70,
-            fontSize: 11.5,
+            color: isSelected ? const Color(0xFF25D366) : const Color(0xFF8696A0),
+            fontSize: 12,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
