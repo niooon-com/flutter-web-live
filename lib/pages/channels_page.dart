@@ -13,12 +13,12 @@ class _ChannelsPageState extends State<ChannelsPage> {
   final List<ChannelItem> _channels = [
     ChannelItem(
       id: "ch1",
-      title: "niooo Official News",
+      title: "niooo Official Updates",
       handle: "@niooo_news",
       avatarUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150",
-      subscribers: "128.4K subscribers",
+      subscribers: "128.4K followers",
       description: "Official product release announcements and feature updates for niooo ecosystem.",
-      latestPost: "🚀 Version 2.0 is live! Enjoy pure dark glassmorphism, instant sync, and ultra-fast compilation.",
+      latestPost: "🚀 Version 2.5 is live! Enjoy WhatsApp Dark Mode, 3D raised glass buttons, and fluid gesture navigation.",
       postTime: "2 hours ago",
       isVerified: true,
       isJoined: true,
@@ -28,7 +28,7 @@ class _ChannelsPageState extends State<ChannelsPage> {
       title: "Flutter & Dart Global Devs",
       handle: "@flutter_global",
       avatarUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=150",
-      subscribers: "54.2K subscribers",
+      subscribers: "54.2K followers",
       description: "Community of Flutter and Dart developers sharing widgets, packages and architectures.",
       latestPost: "Check out the new CanvasKit WASM rendering improvements on Flutter 3.29.",
       postTime: "5 hours ago",
@@ -37,12 +37,12 @@ class _ChannelsPageState extends State<ChannelsPage> {
     ),
     ChannelItem(
       id: "ch3",
-      title: "Glassmorphism & UI Innovations",
+      title: "WhatsApp & Glass UI Designs",
       handle: "@glass_ui_design",
       avatarUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=150",
-      subscribers: "38.9K subscribers",
-      description: "Inspiring dark mode frosted glass UI mockups, animations, and design tokens.",
-      latestPost: "BackdropFilter with sigmaX: 20 gives the most realistic modern liquid glass texture.",
+      subscribers: "38.9K followers",
+      description: "Inspiring dark mode frosted glass UI mockups, 3D buttons, and tactile design tokens.",
+      latestPost: "Elevated dual-shadows with top highlight bevel create the perfect 3D tactile button appearance.",
       postTime: "Yesterday",
       isVerified: false,
       isJoined: true,
@@ -52,7 +52,7 @@ class _ChannelsPageState extends State<ChannelsPage> {
       title: "CyberSecurity & Crypto",
       handle: "@niooo_security",
       avatarUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=150",
-      subscribers: "19.5K subscribers",
+      subscribers: "19.5K followers",
       description: "Audits, cryptography standards, and zero-trust protocol updates.",
       latestPost: "niooo utilizes AES-256 GCM combined with Signal Protocol double-ratchet algorithms.",
       postTime: "2 days ago",
@@ -64,11 +64,12 @@ class _ChannelsPageState extends State<ChannelsPage> {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+      backgroundColor: const Color(0xFF111B21).withValues(alpha: 0.85),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // Header with WhatsApp aesthetic
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
             child: Row(
@@ -79,13 +80,13 @@ class _ChannelsPageState extends State<ChannelsPage> {
                     children: [
                       const Flexible(
                         child: Text(
-                          "Channels",
+                          "Updates",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 23,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Color(0xFFE9EDEF),
                           ),
                         ),
                       ),
@@ -93,14 +94,14 @@ class _ChannelsPageState extends State<ChannelsPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                          color: const Color(0xFF00A884).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
+                          border: Border.all(color: const Color(0xFF00A884).withValues(alpha: 0.5)),
                         ),
                         child: const Text(
-                          "DISCOVER",
+                          "CHANNELS",
                           style: TextStyle(
-                            color: Color(0xFFB388FF),
+                            color: Color(0xFF25D366),
                             fontSize: 9.5,
                             fontWeight: FontWeight.bold,
                           ),
@@ -111,8 +112,8 @@ class _ChannelsPageState extends State<ChannelsPage> {
                 ),
                 GlassIconButton(
                   icon: Icons.search,
-                  tooltip: "Explore",
-                  size: 36,
+                  tooltip: "Find Channels",
+                  size: 38,
                   onTap: () {},
                 ),
               ],
@@ -130,9 +131,16 @@ class _ChannelsPageState extends State<ChannelsPage> {
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.04),
+                    color: const Color(0xFF202C33).withValues(alpha: 0.8),
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.35),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +164,7 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                          color: Colors.white,
+                                          color: Color(0xFFE9EDEF),
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14.5,
                                         ),
@@ -164,7 +172,7 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                     ),
                                     if (ch.isVerified) ...[
                                       const SizedBox(width: 4),
-                                      const Icon(Icons.verified, color: Color(0xFF00E5FF), size: 15),
+                                      const Icon(Icons.verified, color: Color(0xFF25D366), size: 16),
                                     ],
                                   ],
                                 ),
@@ -173,13 +181,13 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                   "${ch.handle} • ${ch.subscribers}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(color: Colors.white54, fontSize: 11.5),
+                                  style: const TextStyle(color: Color(0xFF8696A0), fontSize: 11.5),
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(width: 8),
-                          // Join / Joined Glass Button
+                          // 3D Elevated Follow / Following Button
                           GlassButton(
                             onTap: () {
                               setState(() {
@@ -200,15 +208,15 @@ class _ChannelsPageState extends State<ChannelsPage> {
                             gradient: ch.isJoined
                                 ? null
                                 : const LinearGradient(
-                                    colors: [Color(0xFF7C4DFF), Color(0xFF00E5FF)],
+                                    colors: [Color(0xFF00A884), Color(0xFF008069)],
                                   ),
-                            color: ch.isJoined ? Colors.white.withValues(alpha: 0.08) : null,
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                            color: ch.isJoined ? const Color(0xFF111B21) : null,
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6.5),
                             borderRadius: 12,
                             child: Text(
-                              ch.isJoined ? "Joined" : "Join",
+                              ch.isJoined ? "Following" : "Follow",
                               style: TextStyle(
-                                color: ch.isJoined ? Colors.white70 : Colors.white,
+                                color: ch.isJoined ? const Color(0xFF8696A0) : Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 11.5,
                               ),
@@ -221,20 +229,20 @@ class _ChannelsPageState extends State<ChannelsPage> {
                         ch.description,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white70, fontSize: 12.5),
+                        style: const TextStyle(color: Color(0xFF8696A0), fontSize: 12.5),
                       ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.25),
+                          color: const Color(0xFF111B21),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.campaign_outlined, color: Color(0xFF00E5FF), size: 16),
+                            const Icon(Icons.campaign, color: Color(0xFF00A884), size: 18),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Column(
@@ -244,12 +252,12 @@ class _ChannelsPageState extends State<ChannelsPage> {
                                     ch.latestPost,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                                    style: const TextStyle(color: Color(0xFFE9EDEF), fontSize: 12),
                                   ),
                                   const SizedBox(height: 3),
                                   Text(
                                     ch.postTime,
-                                    style: const TextStyle(color: Colors.white38, fontSize: 10),
+                                    style: const TextStyle(color: Color(0xFF8696A0), fontSize: 10),
                                   ),
                                 ],
                               ),
